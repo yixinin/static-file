@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"io/ioutil"
-	"os/exec"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -38,24 +37,20 @@ func Config(c *gin.Context) {
 }
 
 func Version(c *gin.Context) {
-	var gitLog = ""
-	var cmd = exec.Command("bash", "-c", "git log")
-	out, err := cmd.CombinedOutput()
+	buf, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		if x := string(out); x != "" {
-			c.String(400, x+"\n"+err.Error())
-		} else {
-			c.String(400, err.Error())
-		}
+		c.String(400, err.Error())
 		return
 	}
-	var strs = strings.Split(string(out), "commit ")
-	for _, v := range strs {
-		if len(v) > 54 && v[41] == 65 {
-			gitLog = "commit " + v
-			break
+	var v = ""
+	var strs = strings.Split(string(buf), "\n")
+	for _, s := range strs {
+		var ss = strings.Split(s, ":")
+		if len(ss) > 1 {
+			v = "version" + ss[1]
 		}
+		break
 	}
 
-	c.String(200, gitLog)
+	c.String(200, v)
 }
