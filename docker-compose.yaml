@@ -1,0 +1,26 @@
+version: '3'
+services:
+  static-file-1:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    container_name: static-file-1
+    ports:
+      - 8881:8888
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml
+      - ./static:/app/static
+  static-file-2:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    container_name: static-file-2
+    ports:
+      - 8882:8888
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml
+      - ./static:/app/static
+    
+
