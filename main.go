@@ -47,7 +47,7 @@ func Version(c *gin.Context) {
 	for _, s := range strs {
 		var ss = strings.Split(s, ":")
 		if len(ss) > 1 {
-			v = "version" + ss[1]
+			v = "version from config" + ss[1]
 		}
 		break
 	}
